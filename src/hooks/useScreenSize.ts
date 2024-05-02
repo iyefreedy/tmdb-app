@@ -7,11 +7,19 @@ export const useScreenSize = () => {
   });
 
   useEffect(() => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    setState({
+      width: width,
+      height: height,
+    });
+  }, []);
+
+  useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
-
-      console.log(width, height);
 
       setState({
         width: width,

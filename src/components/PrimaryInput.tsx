@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 interface Props {
+  id?: string;
   type?: React.HTMLInputTypeAttribute;
   className?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;

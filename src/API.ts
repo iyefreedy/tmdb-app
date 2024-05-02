@@ -1,14 +1,18 @@
-import { Credits, Genre, LoginCredential, Movie, Movies } from "@/types";
+import {
+  Account,
+  Credits,
+  Genre,
+  LoginCredential,
+  Movie,
+  MoviesResponse,
+  MovieState,
+} from "@/types";
 
 const API_URL: string = "https://api.themoviedb.org/3/";
 const API_KEY: string | undefined = import.meta.env.VITE_TMDB_API_KEY;
 
 export const SEARCH_BASE_URL: string = `${API_URL}search/movie?api_key=${API_KEY}&language=en-US&query=`;
 export const POPULAR_BASE_URL: string = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US`;
-
-const REQUEST_TOKEN_URL = `${API_URL}authentication/token/new?api_key=${API_KEY}`;
-const LOGIN_URL = `${API_URL}authentication/token/validate_with_login?api_key=${API_KEY}`;
-const SESSION_ID_URL = `${API_URL}authentication/session/new?api_key=${API_KEY}`;
 
 export const IMAGE_BASE_URL: string = "http://image.tmdb.org/t/p/";
 // Options: w300, w780, w1280, original
@@ -26,7 +30,10 @@ const defaultConfig: RequestInit = {
 };
 
 const apiSettings = {
-  fetchMovies: async (searchTerm: string, page: number): Promise<Movies> => {
+  fetchMovies: async (
+    searchTerm: string,
+    page: number,
+  ): Promise<MoviesResponse> => {
     const endpoint = searchTerm
       ? `${SEARCH_BASE_URL}${searchTerm}&page=${page}`
       : `${POPULAR_BASE_URL}&page=${page}`;
@@ -42,8 +49,10 @@ const apiSettings = {
 
     return await (await fetch(endpoint, defaultConfig)).json();
   },
-  getRequestToken: async (): Promise<string> => {
-    const reqToken = await (await fetch(REQUEST_TOKEN_URL)).json();
+  fetchRequestToken: async (): Promise<string> => {
+    const reqToken = await (
+      await fetch(`${API_URL}authentication/token/new?api_key=${API_KEY}`)
+    ).json();
     return reqToken.request_token;
   },
   login: async (credential: LoginCredential, requestToken: string) => {
@@ -53,16 +62,19 @@ const apiSettings = {
     };
 
     const data = await (
-      await fetch(LOGIN_URL, {
-        ...defaultConfig,
-        method: "POST",
-        body: JSON.stringify(bodyData),
-      })
+      await fetch(
+        `${API_URL}authentication/token/validate_with_login?api_key=${API_KEY}`,
+        {
+          ...defaultConfig,
+          method: "POST",
+          body: JSON.stringify(bodyData),
+        },
+      )
     ).json();
 
     if (data.success) {
       const sessionId = await (
-        await fetch(SESSION_ID_URL, {
+        await fetch(`${API_URL}authentication/session/new?api_key=${API_KEY}`, {
           ...defaultConfig,
           method: "POST",
           body: JSON.stringify({ request_token: requestToken }),
@@ -70,6 +82,106 @@ const apiSettings = {
       ).json();
       return sessionId;
     }
+  },
+  logout: async (sessionId: string | undefined) => {
+    const bodyData = {
+      session_id: `${sessionId}`,
+      preview: "",
+    };
+
+    return await (
+      await fetch(`${API_URL}authentication/session?api_key=${API_KEY}`, {
+        ...defaultConfig,
+        method: "DELETE",
+        body: JSON.stringify(bodyData),
+      })
+    ).json();
+  },
+  fetchAccountDetails: async (
+    sessionId: string | undefined,
+  ): Promise<Account> => {
+    return await (
+      await fetch(
+        `${API_URL}account?session_id=${sessionId}&api_key=${API_KEY}`,
+      )
+    ).json();
+  },
+  fetchUserWatchList: async (
+    accountId: number | undefined,
+    sessionId: string | undefined,
+  ): Promise<MoviesResponse> => {
+    return await (
+      await fetch(
+        `${API_URL}account/${accountId}/watchlist/movies?api_key=${API_KEY}&session_id=${sessionId}`,
+        defaultConfig,
+      )
+    ).json();
+  },
+  fetchUserFavorites: async (
+    accountId: number | undefined,
+    sessionId: string | undefined,
+  ): Promise<MoviesResponse> => {
+    return await (
+      await fetch(
+        `${API_URL}account/${accountId}/favorite/movies?api_key=${API_KEY}&session_id=${sessionId}&language=en-US&sort_by=created_at.asc`,
+        defaultConfig,
+      )
+    ).json();
+  },
+  fetchMovieState: async (
+    sessionId: string,
+    movieId: number,
+  ): Promise<MovieState> => {
+    return await (
+      await fetch(
+        `${API_URL}movie/${movieId}/account_states?api_key=${API_KEY}&session_id=${sessionId}`,
+        defaultConfig,
+      )
+    ).json();
+  },
+  addToWatchList: async (
+    movieId: number | undefined,
+    isOnWatchlist: boolean,
+    sessionId: string | undefined,
+  ) => {
+    const bodyData = {
+      media_type: "movie",
+      media_id: movieId,
+      watchlist: isOnWatchlist,
+    };
+
+    return await (
+      await fetch(
+        `${API_URL}account/${movieId}/watchlist?api_key=${API_KEY}&session_id=${sessionId}`,
+        {
+          ...defaultConfig,
+          method: "POST",
+          body: JSON.stringify(bodyData),
+        },
+      )
+    ).json();
+  },
+  addToFavorite: async (
+    movieId: number | undefined,
+    isOnWatchlist: boolean,
+    sessionId: string | undefined,
+  ) => {
+    const bodyData = {
+      media_type: "movie",
+      media_id: movieId,
+      favorite: isOnWatchlist,
+    };
+
+    return await (
+      await fetch(
+        `${API_URL}account/${movieId}/favorite?api_key=${API_KEY}&session_id=${sessionId}`,
+        {
+          ...defaultConfig,
+          method: "POST",
+          body: JSON.stringify(bodyData),
+        },
+      )
+    ).json();
   },
 };
 

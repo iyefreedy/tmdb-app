@@ -6,7 +6,7 @@ interface Props {
   type?: "submit" | "button";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
-  to?: string;
+  tooltip?: string;
 }
 
 type Ref = HTMLButtonElement;

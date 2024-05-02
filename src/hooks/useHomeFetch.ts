@@ -1,9 +1,9 @@
 import API from "@/API";
-import { Movie, Movies } from "@/types";
+import { Movie, MoviesResponse } from "@/types";
 
 import { useEffect, useState } from "react";
 
-const initialState: Movies = {
+const initialState: MoviesResponse = {
   page: 0,
   results: [] as Movie[],
   total_pages: 0,
@@ -11,7 +11,7 @@ const initialState: Movies = {
 };
 
 export const useHomeFetch = () => {
-  const [state, setState] = useState<Movies>(initialState);
+  const [state, setState] = useState<MoviesResponse>(initialState);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -41,7 +41,6 @@ export const useHomeFetch = () => {
   // Handling search movies or initial
   useEffect(() => {
     setState(initialState);
-    console.log("Call data from API");
     fetchMovies(1, searchTerm);
   }, [searchTerm]);
 

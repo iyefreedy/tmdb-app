@@ -1,17 +1,40 @@
 import { Link } from "react-router-dom";
 import reactLogo from "@assets/react.svg";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/hooks/useAuth";
 import PrimaryLink from "./PrimaryLink";
 import PrimaryButton from "./PrimaryButton";
+import Spinner from "./Spinner";
 
 const Header: React.FC = () => {
-  const { user } = useAuth();
+  const { user, attemptLogout, loading } = useAuth();
   const { mode, toggleTheme } = useTheme();
 
-  const [show, setShow] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.body.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.body.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="fixed top-0 z-50 w-full bg-white p-5 shadow-md transition dark:bg-gray-900">
@@ -33,33 +56,44 @@ const Header: React.FC = () => {
             )}
           </button>
 
-          <div>
+          <div ref={dropdownRef}>
             {user ? (
               <PrimaryButton
                 className="relative h-10 w-10 rounded-full"
-                onClick={() => setShow((prev) => !prev)}
+                onClick={toggleDropdown}
               >
-                <span>{user?.username?.at(0)}</span>
+                {loading ? (
+                  <Spinner className="my-0 h-5 w-5 p-0" />
+                ) : (
+                  <span>{user?.username?.at(0)}</span>
+                )}
                 <div
-                  className={`absolute right-0 top-16 w-48 divide-y-2 divide-gray-200 rounded-md bg-white py-2 shadow-md dark:divide-gray-700 dark:bg-gray-900 ${!show && "hidden"}`}
+                  className={`absolute right-0 top-16 w-48 divide-y-2 divide-gray-200 rounded-md bg-white py-2 shadow-md dark:divide-gray-700 dark:bg-gray-900 ${!isOpen && "hidden"}`}
                 >
                   <div className="space-y-1.5">
                     <Link
-                      to={"#"}
-                      className="block px-2.5 py-1 text-start text-gray-800 dark:text-slate-200"
+                      to={"/ratings"}
+                      className="block  px-4 py-1 text-start text-gray-800 dark:text-slate-200"
                     >
                       Ratings
                     </Link>
                     <Link
-                      to={"#"}
-                      className="block px-2.5 py-1 text-start text-gray-800 dark:text-slate-200"
+                      to={"/watchlist"}
+                      className="block  px-4 py-1 text-start text-gray-800 dark:text-slate-200"
                     >
                       Watchlists
                     </Link>
+                    <Link
+                      to={"/favorites"}
+                      className="block  px-4 py-1 text-start text-gray-800 dark:text-slate-200"
+                    >
+                      Favorites
+                    </Link>
                   </div>
                   <Link
-                    to={"#"}
-                    className="block px-2.5 py-1.5 text-start text-gray-800 dark:text-slate-200"
+                    to={"/"}
+                    onClick={attemptLogout}
+                    className="block w-full px-4 py-1.5 text-start text-gray-800 dark:text-slate-200"
                   >
                     Logout
                   </Link>
@@ -68,9 +102,9 @@ const Header: React.FC = () => {
             ) : (
               <PrimaryLink
                 to={"/login"}
-                className="inline-block w-24 rounded-full text-center"
+                className={`inline-block w-24 rounded-full text-center`}
               >
-                Login
+                {loading ? <Spinner className="my-0 h-5 w-5 p-0" /> : "Login"}
               </PrimaryLink>
             )}
           </div>

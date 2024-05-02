@@ -1,27 +1,44 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "@components/Header";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "@pages/Home";
 import Movie from "@pages/Movie";
 import Login from "@pages/Login";
-import ThemeProvider from "./contexts/ThemeContext";
-import AuthProvider from "./contexts/AuthContext";
+import Error from "./pages/Error";
+import RootLayout from "./components/RootLayout";
+import Favorites from "./pages/Favorites";
+import Watchlist from "./pages/Watchlist";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "/movie/:movieId",
+        element: <Movie />,
+      },
+      {
+        path: "/favorites",
+        element: <Favorites />,
+      },
+      {
+        path: "/watchlist",
+        element: <Watchlist />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+    ],
+  },
+]);
 
 function App() {
-  return (
-    <BrowserRouter>
-      <AuthProvider>
-        <ThemeProvider>
-          <Header />
-        </ThemeProvider>
-
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/movie/:id" element={<Movie />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

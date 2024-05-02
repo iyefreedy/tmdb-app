@@ -9,10 +9,11 @@ interface User {
 }
 
 interface AuthState {
-  user: User | undefined;
+  user: User | null;
   loading: boolean;
   error: boolean;
   attemptLogin: (credential: LoginCredential) => Promise<void>;
+  attemptLogout: () => Promise<void>;
 }
 
 interface Props {
@@ -20,29 +21,30 @@ interface Props {
 }
 
 export const AuthContext = createContext<AuthState>({
-  user: undefined,
+  user: null,
   loading: false,
   error: false,
   attemptLogin: async () => {},
+  attemptLogout: async () => {},
 });
 
 const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     const userSession = isPersistedState<User>("user");
 
-    if (userSession) {
-      setUser(userSession);
-    }
+    setUser(userSession);
   }, []);
 
   const attemptLogin = async (credential: LoginCredential) => {
-    setLoading(true);
     try {
-      const requestToken = await API.getRequestToken();
+      setLoading(true);
+      setError(false);
+
+      const requestToken = await API.fetchRequestToken();
       const sessionId = await API.login(credential, requestToken);
 
       const user: User = {
@@ -59,8 +61,27 @@ const AuthProvider = ({ children }: Props) => {
     setLoading(false);
   };
 
+  const attemptLogout = async () => {
+    try {
+      setLoading(true);
+      setError(false);
+
+      const sessionUser = isPersistedState<User>("user");
+      await API.logout(sessionUser?.sessionId);
+
+      sessionStorage.removeItem("user");
+      setUser(null);
+    } catch (error) {
+      setError(true);
+    }
+
+    setLoading(false);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, error, attemptLogin }}>
+    <AuthContext.Provider
+      value={{ user, loading, error, attemptLogin, attemptLogout }}
+    >
       {children}
     </AuthContext.Provider>
   );

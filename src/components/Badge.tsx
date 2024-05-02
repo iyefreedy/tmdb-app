@@ -9,7 +9,7 @@ interface Props {
 
 const Badge: React.FC<Props> = ({ children, className, onClick }) => {
   const defaultClassName = twMerge(
-    "rounded-full bg-gray-400 px-5 py-1 text-xs font-light text-white",
+    "rounded-full bg-gray-400 px-5 py-1 text-xs font-medium text-white",
     className,
   );
   return (
