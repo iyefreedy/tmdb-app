@@ -66,5 +66,5 @@ export type MovieState = {
   id: number;
   watchlist: boolean;
   favorite: boolean;
-  rated: boolean;
+  rated: object | boolean;
 };
