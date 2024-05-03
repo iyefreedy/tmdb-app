@@ -14,7 +14,7 @@ const API_KEY: string | undefined = import.meta.env.VITE_TMDB_API_KEY;
 export const SEARCH_BASE_URL: string = `${API_URL}search/movie?api_key=${API_KEY}&language=en-US&query=`;
 export const POPULAR_BASE_URL: string = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US`;
 
-export const IMAGE_BASE_URL: string = "http://image.tmdb.org/t/p/";
+export const IMAGE_BASE_URL: string = "https://image.tmdb.org/t/p/";
 // Options: w300, w780, w1280, original
 export const BACKDROP_SIZE: string = "w1280";
 // Options: w92, w154, w185, w342, w500, w780, original
