@@ -1,11 +1,11 @@
 import AccountMovieState from "@/components/AccountMovieState";
 import Spinner from "@/components/Spinner";
-import { useWatchlistMovies } from "@/hooks/useWatchlistMovies";
+import { useWatchlistMoviesFetch } from "@/hooks/useWatchlistMoviesFetch";
 import { getPosterUrl } from "@/utils";
 import noImagePlaceholder from "@assets/no-image-placeholder.png";
 
 const Watchlist: React.FC = () => {
-  const { state, loading } = useWatchlistMovies();
+  const { state, loading } = useWatchlistMoviesFetch();
 
   return (
     <main className="p-5">

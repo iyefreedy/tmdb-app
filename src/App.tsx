@@ -6,6 +6,7 @@ import Error from "./pages/Error";
 import RootLayout from "./components/RootLayout";
 import Favorites from "./pages/Favorites";
 import Watchlist from "./pages/Watchlist";
+import Ratings from "./pages/Ratings";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/watchlist",
         element: <Watchlist />,
+      },
+      {
+        path: "/ratings",
+        element: <Ratings />,
       },
       {
         path: "/login",

@@ -128,6 +128,17 @@ const apiSettings = {
       )
     ).json();
   },
+  fetchUserRatedMovies: async (
+    accountId: number | undefined,
+    sessionId: string | undefined,
+  ): Promise<MoviesResponse> => {
+    return await (
+      await fetch(
+        `${API_URL}account/${accountId}/rated/movies?api_key=${API_KEY}&session_id=${sessionId}&language=en-US&sort_by=created_at.asc`,
+        defaultConfig,
+      )
+    ).json();
+  },
   fetchMovieState: async (
     sessionId: string,
     movieId: number,

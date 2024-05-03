@@ -10,7 +10,7 @@ const initialState: MoviesResponse = {
   total_results: 0,
 };
 
-export const useFavoriteMovies = () => {
+export const useRatedMoviesFetch = () => {
   const { user } = useAuth();
 
   const [state, setState] = useState(initialState);
@@ -29,7 +29,10 @@ export const useFavoriteMovies = () => {
         }
 
         const account = await API.fetchAccountDetails(user.sessionId);
-        const movies = await API.fetchUserFavorites(account.id, user.sessionId);
+        const movies = await API.fetchUserRatedMovies(
+          account.id,
+          user.sessionId,
+        );
 
         setState((previousState) => ({
           ...movies,

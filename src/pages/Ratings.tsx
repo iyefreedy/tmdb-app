@@ -1,16 +1,16 @@
 import AccountMovieState from "@/components/AccountMovieState";
 import Spinner from "@/components/Spinner";
-import { useFavoriteMoviesFetch } from "@/hooks/useFavoriteMoviesFetch";
+import { useRatedMoviesFetch } from "@/hooks/useRatedMovies";
 import { getPosterUrl } from "@/utils";
 import noImagePlaceholder from "@assets/no-image-placeholder.png";
 
-const Favorites: React.FC = () => {
-  const { state, loading } = useFavoriteMoviesFetch();
+const Ratings: React.FC = () => {
+  const { state, loading } = useRatedMoviesFetch();
 
   return (
     <main className="p-5">
       <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-100">
-        Favorite Movies
+        Rated Movies
       </h2>
 
       <ul className="space-y-4">
@@ -49,4 +49,4 @@ const Favorites: React.FC = () => {
   );
 };
 
-export default Favorites;
+export default Ratings;

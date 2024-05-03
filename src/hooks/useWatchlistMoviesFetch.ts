@@ -10,7 +10,7 @@ const initialState: MoviesResponse = {
   total_results: 0,
 };
 
-export const useWatchlistMovies = () => {
+export const useWatchlistMoviesFetch = () => {
   const { user } = useAuth();
 
   const [state, setState] = useState(initialState);

@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 type LoadingType = "favorite" | "watchlist" | "rated";
 
-export const useMovieAccountState = (movieId: number) => {
+export const useMovieStateFetch = (movieId: number) => {
   const { user } = useAuth();
 
   const [state, setState] = useState<MovieState>({} as MovieState);

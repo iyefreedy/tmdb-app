@@ -1,5 +1,5 @@
 import PrimaryButton from "@/components/PrimaryButton";
-import { useMovieAccountState } from "@/hooks/useMovieAccountState";
+import { useMovieStateFetch } from "@/hooks/useMovieStateFetch";
 import {
   BookmarkIcon as OutlineBookmarkIcon,
   HeartIcon as OutlineHeartIcon,
@@ -29,7 +29,7 @@ const AccountMovieState: React.FC<Props> = ({ movieId }) => {
     addToWatchList,
     addToFavorite,
     rateMovie,
-  } = useMovieAccountState(movieId);
+  } = useMovieStateFetch(movieId);
 
   const [value, setValue] = useState<number>(0);
   const [showRatingDialog, setShowRatingDialog] = useState<boolean>(false);
