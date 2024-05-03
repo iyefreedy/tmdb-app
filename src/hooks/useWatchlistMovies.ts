@@ -29,7 +29,7 @@ export const useWatchlistMovies = () => {
         }
 
         const account = await API.fetchAccountDetails(user.sessionId);
-        const movies = await API.fetchUserFavorites(account.id, user.sessionId);
+        const movies = await API.fetchUserWatchList(account.id, user.sessionId);
 
         setState((previousState) => ({
           ...movies,
