@@ -18,7 +18,7 @@ const Favorites: React.FC = () => {
           <Spinner />
         ) : (
           state.results.map((movie) => (
-            <li className="flex rounded-xl bg-white p-5 shadow-lg dark:bg-gray-900">
+            <li className="rounded-xl bg-white p-5 shadow-lg md:flex dark:bg-gray-900">
               <img
                 src={
                   movie.poster_path
@@ -29,7 +29,7 @@ const Favorites: React.FC = () => {
                 width={100}
               />
 
-              <div className="ml-4">
+              <div className="mt-4 md:ml-4 md:mt-0">
                 <div className="mb-2">
                   <h3 className="mb-2 text-xl dark:text-gray-100">
                     {movie.title}
