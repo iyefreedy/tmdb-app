@@ -38,7 +38,7 @@ const Header: React.FC = () => {
   return (
     <nav className="fixed top-0 z-10 w-full bg-white p-5 shadow-md transition dark:bg-gray-900">
       <div className="flex items-center justify-between">
-        <Link to={"/"}>
+        <Link to={"/"} aria-label="Homepage">
           <TvIcon className="h-8 w-8 text-sky-600" />
         </Link>
 
@@ -47,6 +47,7 @@ const Header: React.FC = () => {
             type="button"
             onClick={toggleTheme}
             className="h-10 w-10 rounded-full p-1.5 focus:ring focus:ring-gray-400 dark:focus:ring-gray-600"
+            aria-label="Toggle theme"
           >
             {mode === "dark" ? (
               <SunIcon className="mx-auto h-6 w-6 text-black dark:text-white" />

@@ -12,7 +12,7 @@ type Ref = HTMLAnchorElement;
 const PrimaryLink = forwardRef<Ref, Props>(
   ({ children, to, className }, ref) => {
     const defaultClassname = twMerge(
-      "p-2 rounded-md bg-green-600 text-white dark:bg-green-400 dark:text-gray-800",
+      "p-2 rounded-md bg-green-700 text-white dark:bg-green-400 dark:text-gray-800",
       className,
     );
     return (
