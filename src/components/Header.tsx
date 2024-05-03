@@ -70,6 +70,7 @@ const Header: React.FC = () => {
                   className={`absolute right-0 top-16 w-48 divide-y-2 divide-gray-200 rounded-md bg-white py-2 shadow-md dark:divide-gray-700 dark:bg-gray-900 ${!isOpen && "hidden"}`}
                 >
                   <div className="space-y-1.5">
+                    {/* Will redirect to error page on purpose to show not found page */}
                     <Link
                       to={"/ratings"}
                       className="block  px-4 py-1 text-start text-gray-800 dark:text-slate-200"

@@ -8,9 +8,9 @@ const Error = () => {
   console.log(error);
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
+    <div className="flex h-screen w-screen flex-col items-center justify-center p-5 dark:text-white">
       <img src={notFoundImage} alt="not found" width={450} />
-      <div className="text-xl font-medium">
+      <div className="text-xl font-medium ">
         Sorry, the page you're looking for not found.
       </div>
       <Link className="underline" to={"/"}>
