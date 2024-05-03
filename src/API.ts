@@ -183,6 +183,26 @@ const apiSettings = {
       )
     ).json();
   },
+  addRating: async (
+    movieId: number | undefined,
+    sessionId: string | undefined,
+    value: number,
+  ) => {
+    const dataBody = {
+      value: value,
+    };
+
+    return await (
+      await fetch(
+        `${API_URL}movie/${movieId}/rating?api_key=${API_KEY}&session_id=${sessionId}`,
+        {
+          ...defaultConfig,
+          method: "POST",
+          body: JSON.stringify(dataBody),
+        },
+      )
+    ).json();
+  },
 };
 
 export default apiSettings;

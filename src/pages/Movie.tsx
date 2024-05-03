@@ -40,7 +40,6 @@ const Movie: React.FC = () => {
   }, [size.width, movie]);
 
   if (loading) return <Spinner />;
-
   if (error) return <div>Something went wrong!</div>;
 
   return (

@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
-import reactLogo from "@assets/react.svg";
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { MoonIcon, SunIcon, TvIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/hooks/useAuth";
 import PrimaryLink from "./PrimaryLink";
 import PrimaryButton from "./PrimaryButton";
@@ -37,10 +36,10 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white p-5 shadow-md transition dark:bg-gray-900">
+    <nav className="fixed top-0 z-10 w-full bg-white p-5 shadow-md transition dark:bg-gray-900">
       <div className="flex items-center justify-between">
         <Link to={"/"}>
-          <img src={reactLogo} alt="React logo" />
+          <TvIcon className="h-8 w-8 text-sky-600" />
         </Link>
 
         <div className="flex items-center space-x-6">

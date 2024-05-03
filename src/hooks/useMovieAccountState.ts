@@ -3,7 +3,7 @@ import { MovieState } from "@/types";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
-type LoadingType = "favorite" | "watchlist";
+type LoadingType = "favorite" | "watchlist" | "rated";
 
 export const useMovieAccountState = (movieId: number) => {
   const { user } = useAuth();
@@ -20,13 +20,17 @@ export const useMovieAccountState = (movieId: number) => {
     return state.favorite;
   }, [state]);
 
+  const isRated = useMemo(() => {
+    return state.rated;
+  }, [state]);
+
   useEffect(() => {
     const fetchMovieState = async () => {
       if (!user) return;
 
       try {
         setError(false);
-        setLoading(["favorite", "watchlist"]);
+        setLoading(["favorite", "watchlist", "rated"]);
 
         const sessionId = user.sessionId;
         const movieState = await API.fetchMovieState(sessionId, movieId);
@@ -82,13 +86,34 @@ export const useMovieAccountState = (movieId: number) => {
     setLoading([]);
   };
 
+  const rateMovie = async (value: number) => {
+    try {
+      setError(false);
+      setLoading(["rated"]);
+
+      if (!user) return;
+      await API.addRating(movieId, user.sessionId, value);
+
+      const sessionId = user.sessionId;
+
+      const movieState = await API.fetchMovieState(sessionId, movieId);
+      setState(movieState);
+    } catch (error) {
+      setError(true);
+    }
+
+    setLoading([]);
+  };
+
   return {
     movieState: state,
     isOnWatchlist,
     isOnFavorite,
+    isRated,
     isLoading,
     error,
     addToWatchList,
     addToFavorite,
+    rateMovie,
   };
 };
