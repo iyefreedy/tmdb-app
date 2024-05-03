@@ -103,6 +103,7 @@ const AccountMovieState: React.FC<Props> = ({ movieId }) => {
         onSubmit={handleRateMovie}
         value={value}
         isLoading={isLoading.includes("rated")}
+        setShow={setShowRatingDialog}
       />
     </>
   );
